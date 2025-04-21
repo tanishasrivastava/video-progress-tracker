@@ -8,7 +8,7 @@ const VideoPlayer = () => {
   const [startTime, setStartTime] = useState(null);
   const [progress, setProgress] = useState(0);
 
-  // Load saved progress from localStorage
+
   useEffect(() => {
     const saved = JSON.parse(localStorage.getItem("progressData") || "{}");
     if (saved.intervals) setIntervals(saved.intervals);
@@ -16,7 +16,7 @@ const VideoPlayer = () => {
       videoRef.current.currentTime = saved.lastTime;
   }, []);
 
-  // Called every second or so as video plays
+  
   const handleTimeUpdate = () => {
     const currentTime = videoRef.current.currentTime;
 
@@ -49,7 +49,7 @@ const VideoPlayer = () => {
     setStartTime(null);
     if (videoRef.current) {
       videoRef.current.currentTime = 0;
-      videoRef.current.pause(); // optional: prevent auto-play after reset
+      videoRef.current.pause(); 
     }
   };
 
