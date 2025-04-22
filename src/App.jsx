@@ -5,7 +5,7 @@ import VideoPlayer from './components/VideoPlayer';
 function App() {
   return (
     <div className="app">
-      <h1>Lecture Video Progress Tracker</h1>
+      <h1 className="righteous-regular">LECTURE VIDEO PROGRESS TRACKER</h1>
       <VideoPlayer />
     </div>
   );

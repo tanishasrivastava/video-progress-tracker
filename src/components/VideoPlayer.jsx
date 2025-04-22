@@ -67,7 +67,7 @@ const VideoPlayer = () => {
         <p>Progress: {progress.toFixed(2)}%</p>
         <progress value={progress} max="100" />
         <br />
-        <button onClick={handleReset}>Reset Progress</button>
+        <button onClick={handleReset}>RESET PROGRESS</button>
       </div>
     </div>
   );
