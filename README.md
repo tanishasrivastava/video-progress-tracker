@@ -1,4 +1,9 @@
 # 🎥 Video Progress Tracker
+
+
+https://github.com/user-attachments/assets/06abbe0c-3373-4faf-a571-7d9033964dc2
+
+
 <img width="1215" alt="Screenshot 2025-04-23 at 9 24 59 PM" src="https://github.com/user-attachments/assets/b53e321f-4565-4847-9b52-d999e0401f40" />
 <img width="1215" alt="Screenshot 2025-04-23 at 9 25 19 PM" src="https://github.com/user-attachments/assets/dbf710bd-009f-4a51-9041-734a8aeb3a6b" />
 
