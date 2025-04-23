@@ -7,7 +7,8 @@ const VideoPlayer = () => {
   const [intervals, setIntervals] = useState([]);
   const [startTime, setStartTime] = useState(null);
   const [progress, setProgress] = useState(0);
-  const [isSeeking, setIsSeeking] = useState(false); 
+  const [hasSeekedSincePlay, setHasSeekedSincePlay] = useState(false);
+
   useEffect(() => {
     const saved = JSON.parse(localStorage.getItem("progressData") || "{}");
     if (saved.intervals) setIntervals(saved.intervals);
@@ -18,38 +19,41 @@ const VideoPlayer = () => {
   const handleTimeUpdate = () => {
     const currentTime = videoRef.current.currentTime;
 
-    if (isSeeking) return; 
-
     if (startTime === null) {
       setStartTime(currentTime);
     } else if (Math.abs(currentTime - startTime) >= 1) {
-      const newInterval = [startTime, currentTime].sort((a, b) => a - b);
-      const updated = mergeIntervals([...intervals, newInterval]);
-      setIntervals(updated);
-      setStartTime(currentTime);
+      if (!hasSeekedSincePlay) {
+        const newInterval = [startTime, currentTime].sort((a, b) => a - b);
+        const updated = mergeIntervals([...intervals, newInterval]);
+        setIntervals(updated);
 
-      const percent = getProgressPercent(updated, videoRef.current.duration);
-      setProgress(percent);
+        const percent = getProgressPercent(updated, videoRef.current.duration);
+        setProgress(percent);
 
-      localStorage.setItem(
-        "progressData",
-        JSON.stringify({ intervals: updated, lastTime: currentTime })
-      );
+        localStorage.setItem(
+          "progressData",
+          JSON.stringify({ intervals: updated, lastTime: currentTime })
+        );
+      }
+      setStartTime(currentTime); 
+      setHasSeekedSincePlay(false); 
     }
   };
 
   const handlePause = () => setStartTime(null);
   const handleSeeked = () => {
-    setIsSeeking(false); 
+    setHasSeekedSincePlay(true); 
     setStartTime(null);
   };
-  const handleSeeking = () => setIsSeeking(true); 
+  const handleSeeking = () => setHasSeekedSincePlay(true);
+  const handlePlay = () => setHasSeekedSincePlay(false); 
 
   const handleReset = () => {
     localStorage.removeItem("progressData");
     setIntervals([]);
     setProgress(0);
     setStartTime(null);
+    setHasSeekedSincePlay(false);
     if (videoRef.current) {
       videoRef.current.currentTime = 0;
       videoRef.current.pause();
@@ -61,6 +65,7 @@ const VideoPlayer = () => {
       <video
         ref={videoRef}
         controls
+        onPlay={handlePlay}
         onTimeUpdate={handleTimeUpdate}
         onPause={handlePause}
         onSeeked={handleSeeked}
