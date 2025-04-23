@@ -41,7 +41,7 @@ const VideoPlayer = () => {
   const handlePause = () => setStartTime(null);
   const handleSeeked = () => setStartTime(null);
 
-  // Reset button handler
+  
   const handleReset = () => {
     localStorage.removeItem("progressData");
     setIntervals([]);
