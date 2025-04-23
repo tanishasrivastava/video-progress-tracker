@@ -7,7 +7,7 @@ const VideoPlayer = () => {
   const [intervals, setIntervals] = useState([]);
   const [startTime, setStartTime] = useState(null);
   const [progress, setProgress] = useState(0);
-  const [ignoreNextUpdate, setIgnoreNextUpdate] = useState(false);
+  const [hasSeekedSincePlay, setHasSeekedSincePlay] = useState(false);
 
   useEffect(() => {
     const saved = JSON.parse(localStorage.getItem("progressData") || "{}");
@@ -17,54 +17,47 @@ const VideoPlayer = () => {
   }, []);
 
   const handleTimeUpdate = () => {
-    const video = videoRef.current;
-    const currentTime = video.currentTime;
+    const currentTime = videoRef.current.currentTime;
+    const duration = videoRef.current.duration;
 
-  
-    if (ignoreNextUpdate || currentTime >= video.duration - 0.5) return;
+   
+    if (currentTime >= duration - 0.5) return;
 
     if (startTime === null) {
       setStartTime(currentTime);
     } else if (Math.abs(currentTime - startTime) >= 1) {
-      const newInterval = [startTime, currentTime].sort((a, b) => a - b);
-      const updated = mergeIntervals([...intervals, newInterval]);
-      setIntervals(updated);
+      if (!hasSeekedSincePlay) {
+        const newInterval = [startTime, currentTime].sort((a, b) => a - b);
+        const updated = mergeIntervals([...intervals, newInterval]);
+        setIntervals(updated);
 
-      const percent = getProgressPercent(updated, video.duration);
-      setProgress(percent);
+        const percent = getProgressPercent(updated, duration);
+        setProgress(percent);
 
-      localStorage.setItem(
-        "progressData",
-        JSON.stringify({ intervals: updated, lastTime: currentTime })
-      );
-
-      setStartTime(currentTime); 
+        localStorage.setItem(
+          "progressData",
+          JSON.stringify({ intervals: updated, lastTime: currentTime })
+        );
+      }
+      setStartTime(currentTime);
+      setHasSeekedSincePlay(false);
     }
   };
 
+  const handlePause = () => setStartTime(null);
   const handleSeeked = () => {
-    setIgnoreNextUpdate(true);
+    setHasSeekedSincePlay(true);
     setStartTime(null);
   };
-
-  const handleSeeking = () => {
-    setIgnoreNextUpdate(true);
-  };
-
-  const handlePlay = () => {
-    setIgnoreNextUpdate(false);
-  };
-
-  const handlePause = () => {
-    setStartTime(null);
-  };
+  const handleSeeking = () => setHasSeekedSincePlay(true);
+  const handlePlay = () => setHasSeekedSincePlay(false);
 
   const handleReset = () => {
     localStorage.removeItem("progressData");
     setIntervals([]);
     setProgress(0);
     setStartTime(null);
-    setIgnoreNextUpdate(false);
+    setHasSeekedSincePlay(false);
     if (videoRef.current) {
       videoRef.current.currentTime = 0;
       videoRef.current.pause();
