@@ -18,6 +18,10 @@ const VideoPlayer = () => {
 
   const handleTimeUpdate = () => {
     const currentTime = videoRef.current.currentTime;
+    const duration = videoRef.current.duration;
+
+   
+    if (currentTime >= duration - 0.5) return;
 
     if (startTime === null) {
       setStartTime(currentTime);
@@ -27,7 +31,7 @@ const VideoPlayer = () => {
         const updated = mergeIntervals([...intervals, newInterval]);
         setIntervals(updated);
 
-        const percent = getProgressPercent(updated, videoRef.current.duration);
+        const percent = getProgressPercent(updated, duration);
         setProgress(percent);
 
         localStorage.setItem(
@@ -35,18 +39,18 @@ const VideoPlayer = () => {
           JSON.stringify({ intervals: updated, lastTime: currentTime })
         );
       }
-      setStartTime(currentTime); 
-      setHasSeekedSincePlay(false); 
+      setStartTime(currentTime);
+      setHasSeekedSincePlay(false);
     }
   };
 
   const handlePause = () => setStartTime(null);
   const handleSeeked = () => {
-    setHasSeekedSincePlay(true); 
+    setHasSeekedSincePlay(true);
     setStartTime(null);
   };
   const handleSeeking = () => setHasSeekedSincePlay(true);
-  const handlePlay = () => setHasSeekedSincePlay(false); 
+  const handlePlay = () => setHasSeekedSincePlay(false);
 
   const handleReset = () => {
     localStorage.removeItem("progressData");
