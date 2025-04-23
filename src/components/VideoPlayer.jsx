@@ -7,8 +7,7 @@ const VideoPlayer = () => {
   const [intervals, setIntervals] = useState([]);
   const [startTime, setStartTime] = useState(null);
   const [progress, setProgress] = useState(0);
-
-
+  const [isSeeking, setIsSeeking] = useState(false); 
   useEffect(() => {
     const saved = JSON.parse(localStorage.getItem("progressData") || "{}");
     if (saved.intervals) setIntervals(saved.intervals);
@@ -16,9 +15,10 @@ const VideoPlayer = () => {
       videoRef.current.currentTime = saved.lastTime;
   }, []);
 
-  
   const handleTimeUpdate = () => {
     const currentTime = videoRef.current.currentTime;
+
+    if (isSeeking) return; 
 
     if (startTime === null) {
       setStartTime(currentTime);
@@ -39,9 +39,12 @@ const VideoPlayer = () => {
   };
 
   const handlePause = () => setStartTime(null);
-  const handleSeeked = () => setStartTime(null);
+  const handleSeeked = () => {
+    setIsSeeking(false); 
+    setStartTime(null);
+  };
+  const handleSeeking = () => setIsSeeking(true); 
 
-  
   const handleReset = () => {
     localStorage.removeItem("progressData");
     setIntervals([]);
@@ -49,7 +52,7 @@ const VideoPlayer = () => {
     setStartTime(null);
     if (videoRef.current) {
       videoRef.current.currentTime = 0;
-      videoRef.current.pause(); 
+      videoRef.current.pause();
     }
   };
 
@@ -61,6 +64,7 @@ const VideoPlayer = () => {
         onTimeUpdate={handleTimeUpdate}
         onPause={handlePause}
         onSeeked={handleSeeked}
+        onSeeking={handleSeeking}
         src="/sample-video.mp4"
       />
       <div className="progress-info">
