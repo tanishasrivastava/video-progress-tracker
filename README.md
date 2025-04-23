@@ -1,10 +1,12 @@
 # 🎥 Video Progress Tracker
+<img width="1215" alt="Screenshot 2025-04-23 at 9 24 59 PM" src="https://github.com/user-attachments/assets/b53e321f-4565-4847-9b52-d999e0401f40" />
+<img width="1215" alt="Screenshot 2025-04-23 at 9 25 19 PM" src="https://github.com/user-attachments/assets/dbf710bd-009f-4a51-9041-734a8aeb3a6b" />
 
 
 
 ## 🚀 Live Demo
 
-[Check it out here](https://your-demo-link.com)
+[Check it out here](https://videoprogresstracker.netlify.app/)
 
 ## **Tech Stack**
 - HTML
